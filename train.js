@@ -39,6 +39,21 @@ function removeHashtag(text, hashtags) {
     return _text;
 }
 
+function getLabel(coordinates) {
+    var _coordinates = coordinates.coordinates,
+        _label;
+    _.each(cities, function(city, label){
+        if (parseFloat(city[0]) <= _coordinates[0] &&
+            _coordinates[0] <= parseFloat(city[2]) &&
+            parseFloat(city[1]) <= _coordinates[1] &&
+            _coordinates[1] <= parseFloat(city[3])) {
+            _label = label;
+        }
+    });
+    return _label;
+}
+
+
 Tweet.find({}, function(err, docs) {
     _.each(docs, function(doc){
         var tweet = doc._doc;
@@ -49,6 +64,15 @@ Tweet.find({}, function(err, docs) {
             console.log(hashtags);
             console.log(text);
         }
+        var label = getLabel(tweet.coordinates);
+        var stringValues = [[text]];
+        var datum = [stringValues];
+        data = [ [label, datum] ];
+        classifier.train('sample', data, function (error, result) {
+            if (error) {
+                throw error;
+            }
+        });
     });
     process.exit();
 });
