@@ -79,18 +79,20 @@ console.log(util.inspect(params));
 
 twit.stream('filter', params, function(stream) {
     stream.on('data', function(data) {
+        if (data.coordinates) {
 
-        if (!TweetSchema) {
-             TweetSchema = new Schema( makeSchema(data, '') );
-             Tweet = mongoose .model('Tweet', TweetSchema);
+            if (!TweetSchema) {
+                 TweetSchema = new Schema( makeSchema(data, '') );
+                 Tweet = mongoose .model('Tweet', TweetSchema);
+            }
+
+            var tweet = new Tweet(data);
+            // console.log(util.inspect(data.text));
+            // console.log('-------------');
+            tweet.save( function(err) {
+                if (err) console.error(err);
+            });
         }
-
-        var tweet = new Tweet(data);
-        // console.log(util.inspect(data.text));
-        // console.log('-------------');
-        tweet.save( function(err) {
-            if (err) console.error(err);
-        });
     })
     .on('end', function(){
         console.log("stream end");
