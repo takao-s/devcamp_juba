@@ -42,7 +42,7 @@ function removeHashtag(text, hashtags) {
 function getLabel(coordinates) {
     var _coordinates = coordinates.coordinates,
         _label;
-    console.log(_coordinates);
+    // console.log(_coordinates);
     _.each(cities, function(city, label){
         if (parseFloat(city[0]) <= _coordinates[0] &&
             _coordinates[0] <= parseFloat(city[2]) &&
@@ -62,8 +62,8 @@ Tweet.find({}, function(err, docs) {
         var hashtags = tweet.entities.hashtags;
         var text = removeHashtag(tweet.text, hashtags);
         var label = getLabel(tweet.coordinates);
-        console.log(label);
         if (!label) {return;}
+        console.log(label);
         var str = [[["text", text]]];
         var datum = [label, str];
         var data = [ datum ];
@@ -73,5 +73,5 @@ Tweet.find({}, function(err, docs) {
             }
         });
     });
-    process.exit();
+    // process.exit();
 });

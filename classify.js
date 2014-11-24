@@ -11,11 +11,11 @@ process.argv.forEach(function (val, index, array) {
 
 if (!text) {
     console.log("param not exits");
-    return;
+    process.exit();
 }
 
 var name = "sample";
-var data = [[["text", text]]];
+var data = [[[["text", text]]]];
 
 classifier.classify(name, data, function (error, result) {
     if (error) {
