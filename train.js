@@ -1,6 +1,6 @@
 var util = require('util'),
     jubatus = require("jubatus"),
-    // classifier = new jubatus.classifier.client.Classifier(9199, "localhost"),
+    classifier = new jubatus.classifier.client.Classifier(9199, "localhost"),
     _ = require('underscore'),
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
@@ -64,9 +64,9 @@ Tweet.find({}, function(err, docs) {
         var label = getLabel(tweet.coordinates);
         console.log(label);
         if (!label) {return;}
-        var stringValues = [[text]];
-        var datum = [stringValues];
-        data = [ [label, datum] ];
+        var str = [[["text", text]]];
+        var datum = [label, str];
+        var data = [ datum ];
         classifier.train('sample', data, function (error, result) {
             if (error) {
                 throw error;
@@ -75,19 +75,3 @@ Tweet.find({}, function(err, docs) {
     });
     process.exit();
 });
-
-/*
-var name = "sample",
-    stringValues = [ ["foo", "bar"] ],
-    numValues = [ ["quux", 0.1] ],
-    datum = [stringValues, numValues],
-    label = "baz",
-    data = [ [label, datum] ];
-
-classifier.train(name, data, function (error, result) {
-    if (error) {
-        throw error;
-    }
-});
-
-*/

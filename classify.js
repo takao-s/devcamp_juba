@@ -1,8 +1,21 @@
-var name = "sample",
-    stringValues = [ ["foo", "qux"] ],
-    numValues = [ ["quux", new Double(1)] ],
-    datum = [stringValues, numValues],
-    data = [datum];
+var util = require('util'),
+    jubatus = require("jubatus"),
+    classifier = new jubatus.classifier.client.Classifier(9199, "localhost"),
+    text;
+
+process.argv.forEach(function (val, index, array) {
+    if (index === 2) {
+        text = val;
+    }
+});
+
+if (!text) {
+    console.log("param not exits");
+    return;
+}
+
+var name = "sample";
+var data = [[["text", text]]];
 
 classifier.classify(name, data, function (error, result) {
     if (error) {
